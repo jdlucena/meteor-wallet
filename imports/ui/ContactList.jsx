@@ -3,27 +3,27 @@ import { useTracker, useSubscribe, useFind } from "meteor/react-meteor-data";
 import { ContactsCollection } from "../api/ContactsCollection";
 
 export const ContactList = () => {
-  const isLoading = useSubscribe('allContacts');
+  const isLoading = useSubscribe('contacts');
   const contacts = useFind(() => ContactsCollection.find({}, { sort: { createdAt: -1 } }))
 
   // const contacts = useTracker(() => {
   //   return ContactsCollection.find({}, { sort: { createdAt: -1 } }).fetch();
   // })
 
-  const removeContact = (event, _id) => {
+  const archiveContact = (event, _id) => {
     event.preventDefault();
-    Meteor.call('contacts.remove', { contactId: _id }, (res) => {
+    Meteor.call('contacts.archive', { contactId: _id }, (res) => {
       if (!res) {
         iziToast.success({
           position: 'center',
           title: 'Success!',
-          message: 'Contact deleted'
+          message: 'Contact arquived'
         });
       } else {
         iziToast.error({
           position: 'center',
           title: 'Error!',
-          message: 'Contact not deleted'
+          message: 'Contact not arquived'
         });
       }
     });
@@ -53,10 +53,11 @@ export const ContactList = () => {
             <p className="text-sm font-medium text-gray-500 truncate">{contact.email}</p>
           </div>
           <div>
-            <a href="#" onClick={(event) => removeContact(event, contact._id)}>
+            <a href="#" onClick={(event) => archiveContact(event, contact._id)}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
               </svg>
+
             </a>
           </div>
         </div>
