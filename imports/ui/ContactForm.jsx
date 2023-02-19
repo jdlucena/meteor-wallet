@@ -1,23 +1,41 @@
 import React, { useState } from "react";
-import { ContactsCollection } from "../api/ContactsCollection";
+//import { ContactsCollection } from "../api/ContactsCollection";
+import { Meteor } from "meteor/meteor";
 
 export const ContactForm = () => {
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [imageUrl, setimageUrl] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [imageUrl, setimageUrl] = useState("");
 
-    const saveContact = () => {
-        ContactsCollection.insert({name, email, imageUrl});
+  const saveContact = () => {
+    //ContactsCollection.insert({name, email, imageUrl});
+    Meteor.call('contacts.insert', { name, email, imageUrl }, (res) => {
+      if (res) {
+        iziToast.error({
+          position: 'center',
+          title: 'Erro!',
+          message: res.error
+        });
+      } else {
+        iziToast.success({
+          position: 'center',
+          title: 'Save!',
+          message: 'Contact inserted'
+        });
         setName("");
         setEmail("");
         setimageUrl("");
-    }
+      }
+    })
 
-    return (
-        <form className="mt-6">
+  }
+
+  return (
+    <form className="mt-6">
       <div className="grid grid-cols-6 gap-6">
         <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+          <div className="erroName"></div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
             Name
           </label>
@@ -66,5 +84,5 @@ export const ContactForm = () => {
         </button>
       </div>
     </form>
-    )
+  )
 }
