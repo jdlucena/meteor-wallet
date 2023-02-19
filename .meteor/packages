@@ -20,5 +20,5 @@ hot-module-replacement@0.5.2  # Update client in development without reloading t
 static-html@1.3.2             # Define static page content in .html files
 react-meteor-data             # React higher-order component for reactively tracking Meteor data
 #insecure                     # permite de forma insegura o usuário inserir dados no banco
-autopublish                  # permite visulizar dados do banco
+#autopublish                  # permite visulizar dados do banco
 juliancwirko:postcss
